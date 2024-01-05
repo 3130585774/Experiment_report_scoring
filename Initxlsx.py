@@ -1,4 +1,3 @@
-from ChanageName import className
-from SetScore import initExcel
+from SetScore import init_excel
 
-initExcel(className)
+init_excel()

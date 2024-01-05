@@ -1,30 +1,37 @@
+import os
+
 import openpyxl
 from docx import Document
 from docx.shared import Pt
 
-from ChanageName import Name_dict, list_subdirectories, find_key_value_pairs
+from ChanageName import name_dict, find_key_value_pairs
 
-className = "2班"
+className = "1班"
 
 
-def initExcel(className):
+def init_excel():
     workbook = openpyxl.Workbook()
     sheet = workbook.active
 
     index_list = ["id", "name"]
 
-    for lesson in list_subdirectories(className):
-        lessonNumbers = list_subdirectories(className + "/" + lesson)
-        for little_lesson in lessonNumbers:
-            index_list.append(little_lesson)
+    # for lesson in list_subdirectories(className):
+    #     lesson_numbers = list_subdirectories(className + "/" + lesson)
+    #     for little_lesson in lesson_numbers:
+    #         index_list.append(little_lesson)
+    for i in range(1, 8):
+        index_list.append(f"go语言实验报告{i}")
 
     print(index_list)
     sheet.append(index_list)
 
-    for key, value in Name_dict.items():
+    for key, value in name_dict.items():
         sheet.append([key, value])
-
-    workbook.save(f"{className}.xlsx")
+    # if file ext
+    if os.path.exists(f"{className}.xlsx"):
+        print(f"{className}.xlsx 存在")
+    else:
+        workbook.save(f"{className}.xlsx")
 
 
 def setScore(_fileName, num: int):
@@ -45,6 +52,10 @@ def setScore(_fileName, num: int):
         doc.save(_fileName)
     except Exception:
         print(_fileName, "成绩为", num)
+        # try:
+        #     os.startfile(f"./{_fileName}")
+        # except Exception as e:
+        #     print(_fileName, "打开失败", e)
 
 
 def getScoreDict(file):
@@ -77,7 +88,7 @@ def getScoreById(_id, subject, score_dict):
 
 
 def getScoreByFileName(data_list, little, fileName):
-    key = find_key_value_pairs(fileName, Name_dict)
+    key = find_key_value_pairs(fileName, name_dict)
     # print(key[0], end="")
     score = getScoreById(key[0], little, data_list)
     return score
